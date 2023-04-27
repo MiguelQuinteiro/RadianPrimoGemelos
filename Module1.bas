@@ -9,4 +9,4 @@ Public Declare Sub keybd_event _
                         ByVal dwExtraInfo As Long)
 
 
-
+Public MIANGULOPROCESO As Double

@@ -1,7 +1,7 @@
 VERSION 5.00
 Begin VB.Form frmRadianPrimo 
    AutoRedraw      =   -1  'True
-   BackColor       =   &H8000000D&
+   BackColor       =   &H80000006&
    Caption         =   "Números Primos sobre Circunferencia"
    ClientHeight    =   9510
    ClientLeft      =   60
@@ -21,7 +21,7 @@ Begin VB.Form frmRadianPrimo
    ScaleWidth      =   16545
    StartUpPosition =   2  'CenterScreen
    Begin VB.Frame Frame2 
-      BackColor       =   &H8000000D&
+      BackColor       =   &H8000000C&
       Caption         =   "Información "
       BeginProperty Font 
          Name            =   "MS Sans Serif"
@@ -179,7 +179,7 @@ Begin VB.Form frmRadianPrimo
       End
    End
    Begin VB.Frame Frame1 
-      BackColor       =   &H8000000D&
+      BackColor       =   &H8000000A&
       Caption         =   "Controles "
       BeginProperty Font 
          Name            =   "MS Sans Serif"
@@ -195,6 +195,22 @@ Begin VB.Form frmRadianPrimo
       TabIndex        =   0
       Top             =   240
       Width           =   6015
+      Begin VB.TextBox txtAngSup 
+         Height          =   495
+         Left            =   4560
+         TabIndex        =   60
+         Text            =   "90"
+         Top             =   6720
+         Width           =   1215
+      End
+      Begin VB.TextBox txtAngInf 
+         Height          =   495
+         Left            =   4560
+         TabIndex        =   59
+         Text            =   "45"
+         Top             =   6240
+         Width           =   1215
+      End
       Begin VB.TextBox txtAlto 
          Alignment       =   1  'Right Justify
          BeginProperty Font 
@@ -246,7 +262,7 @@ Begin VB.Form frmRadianPrimo
          TabIndex        =   56
          Text            =   "NumerosPrimos.bmp"
          Top             =   6240
-         Width           =   4095
+         Width           =   2415
       End
       Begin VB.TextBox txtRuta 
          BeginProperty Font 
@@ -263,7 +279,7 @@ Begin VB.Form frmRadianPrimo
          TabIndex        =   55
          Text            =   "C:\ImagenesPrimos\"
          Top             =   6720
-         Width           =   4095
+         Width           =   2415
       End
       Begin VB.CommandButton cmdGuardarImagen 
          Caption         =   "Guardar Imagen"
@@ -460,7 +476,7 @@ Begin VB.Form frmRadianPrimo
          Height          =   495
          Left            =   3120
          TabIndex        =   40
-         Text            =   "120"
+         Text            =   "0"
          Top             =   1440
          Width           =   1215
       End
@@ -768,7 +784,7 @@ Begin VB.Form frmRadianPrimo
          Height          =   495
          Left            =   1680
          TabIndex        =   15
-         Text            =   "128"
+         Text            =   "2048"
          Top             =   360
          Width           =   1215
       End
@@ -1105,17 +1121,17 @@ Private Sub Form_Load()
   miFactorCircular = 1.15
   miN = 2
   miMiniRadio = 1
-  miZoom = 16
+  miZoom = 36
   miOrbitaMaxima = 200
   miColorFondo = 0
 
-  miDelta = 2.8125                    ' Para 128
+  'miDelta = 2.8125                    ' Para 128
   'miDelta = 0.5235987756             ' Reduccion
   'miDelta = 1.66016181584687E-03     ' Phi
   'miDelta = 2.718281828              ' e
   'miDelta = 14.13472514              ' Primer cero no trivial de la función Zeta de Riemann
   'miDelta = 29.9999995130823         ' A quince grados
-  'miDelta = 57.2957795130823         ' Un Radian
+  miDelta = 57.2957795130823         ' Un Radian
   'miDelta = 69.1117795130823         ' Un Radian
 
   cboAngulo.AddItem "0.00000000000000"    ' Cero
@@ -1127,17 +1143,17 @@ Private Sub Form_Load()
   cboAngulo.AddItem "29.9999995130823"    ' A quince grados
   cboAngulo.AddItem "57.2957795130823"    ' Un Radian
 
-  miEtiqueta = False
-  miOrbita = True
-  miCompuestos = True
+  miEtiqueta = True
+  miOrbita = False
+  miCompuestos = False
   miPrimos = True
   miLineasP = False
   miLineasC = False
   miEjes = True
-  miUne = False
+  miUne = True
   miUneGap = False
   miPG = False
-  miRama = True
+  miRama = False
   miRango = False
 
   ReDim miOrbitaP(miOrbitaMaxima)
@@ -1440,129 +1456,114 @@ Public Sub Grafica()
       End If
     End If
 
-    ' Inicializa los contadores de orbitas
-    ReDim miOrbitaP(miOrbitaMaxima)
-    ReDim miOrbitaPG(miOrbitaMaxima)
-    ReDim miOrbitaC(miOrbitaMaxima)
-    ReDim miNumeros(miN)
-    ReDim miX(miN)
-    ReDim miY(miN)
 
-    ' Recorre toda las circunferencia
-    Dim i As Long
-    For i = 1 To miN
+  End If
 
-      If miOrbita = True Then
-        ' Puntos iniciales
-        If i = 1 Then
-          miMiniRadio = 1
-          'miMiniRadio = 0.5
-        End If
-        If i = 2 Then
-          miMiniRadio = 2
-          'miMiniRadio = 0.5
-        End If
-        If i = 3 Then
-          miMiniRadio = 1
-          'miMiniRadio = 1
-        End If
+  ' Inicializa los contadores de orbitas
+  ReDim miOrbitaP(miOrbitaMaxima)
+  ReDim miOrbitaPG(miOrbitaMaxima)
+  ReDim miOrbitaC(miOrbitaMaxima)
+  ReDim miNumeros(miN)
+  ReDim miX(miN)
+  ReDim miY(miN)
 
+  ' Recorre toda las circunferencia
+  Dim i As Long
+  For i = 1 To miN
 
-        '                ' Puntos iniciales
-        '                If i = 1 Then
-        '                    miMiniRadio = 0.5
-        '                    'miMiniRadio = 0.5
-        '                End If
-        '                If i = 2 Then
-        '                    miMiniRadio = 1
-        '                    'miMiniRadio = 0.5
-        '                End If
-        '                If i = 3 Then
-        '                    miMiniRadio = 2
-        '                    'miMiniRadio = 1
-        '                End If
-
-      Else
-        ' Puntos iniciales
-        If i = 1 Then
-          miMiniRadio = 50
-        End If
-        If i = 2 Then
-          miMiniRadio = 50
-        End If
-        If i = 3 Then
-          miMiniRadio = 50
-        End If
+    If miOrbita = True Then
+      ' Puntos iniciales
+      If i = 1 Then
+        miMiniRadio = 1
+        'miMiniRadio = 0.5
+      End If
+      If i = 2 Then
+        miMiniRadio = 2
+        'miMiniRadio = 0.5
+      End If
+      If i = 3 Then
+        miMiniRadio = 1
+        'miMiniRadio = 1
       End If
 
-      '            ' Puntos colocados arbitrariamente
-      '            ' Puntos iniciales
-      '            If i = 1 Then
-      '                miMiniRadio = 0.5
-      '            End If
-      '            If i = 2 Then
-      '                miMiniRadio = 0.5
-      '            End If
-      '            If i = 3 Then
-      '                miMiniRadio = 1
-      '            End If
 
-      '            ' Cálculo de las coordenadas X, Y
-      '            X1 = 4750 + ((miRadio * (miMiniRadio / miZoom)) * Cos((360 / miN) * (miPi / 180) * i) * miFactorCircular)
-      '            Y1 = 4750 + ((miRadio * (miMiniRadio / miZoom)) * -Sin((360 / miN) * (miPi / 180) * i) * miFactorCircular)
+      '                ' Puntos iniciales
+      '                If i = 1 Then
+      '                    miMiniRadio = 0.5
+      '                    'miMiniRadio = 0.5
+      '                End If
+      '                If i = 2 Then
+      '                    miMiniRadio = 1
+      '                    'miMiniRadio = 0.5
+      '                End If
+      '                If i = 3 Then
+      '                    miMiniRadio = 2
+      '                    'miMiniRadio = 1
+      '                End If
 
-      ' Cálculo de las coordenadas X, Y
-      If chkInverso.Value = 1 Then
-        miMiniRadio = (-1) * (miMiniRadio - Val(txtInverso.Text))
-        X1 = 4750 + ((miRadio * (miMiniRadio / miZoom)) * Cos(i * miDelta * (miPi / 180)) * miFactorCircular)
-        Y1 = 4750 + ((miRadio * (miMiniRadio / miZoom)) * -Sin(i * miDelta * (miPi / 180)) * miFactorCircular)
-        miMiniRadio = (-1) * (miMiniRadio - Val(txtInverso.Text))
+    Else
+      ' Puntos iniciales
+      If i = 1 Then
+        miMiniRadio = 50
+      End If
+      If i = 2 Then
+        miMiniRadio = 50
+      End If
+      If i = 3 Then
+        miMiniRadio = 50
+      End If
+    End If
+
+    '            ' Puntos colocados arbitrariamente
+    '            ' Puntos iniciales
+    '            If i = 1 Then
+    '                miMiniRadio = 0.5
+    '            End If
+    '            If i = 2 Then
+    '                miMiniRadio = 0.5
+    '            End If
+    '            If i = 3 Then
+    '                miMiniRadio = 1
+    '            End If
+
+    '            ' Cálculo de las coordenadas X, Y
+    '            X1 = 4750 + ((miRadio * (miMiniRadio / miZoom)) * Cos((360 / miN) * (miPi / 180) * i) * miFactorCircular)
+    '            Y1 = 4750 + ((miRadio * (miMiniRadio / miZoom)) * -Sin((360 / miN) * (miPi / 180) * i) * miFactorCircular)
+
+    MIANGULOPROCESO = (miDelta * i) - Int(miDelta * i / 360) * 360
+
+    ' Cálculo de las coordenadas X, Y
+    If chkInverso.Value = 1 Then
+      miMiniRadio = (-1) * (miMiniRadio - Val(txtInverso.Text))
+      X1 = 4750 + ((miRadio * (miMiniRadio / miZoom)) * -Cos(i * miDelta * (miPi / 180)) * miFactorCircular)
+      Y1 = 4750 + ((miRadio * (miMiniRadio / miZoom)) * Sin(i * miDelta * (miPi / 180)) * miFactorCircular)
+      miMiniRadio = (-1) * (miMiniRadio - Val(txtInverso.Text))
+    Else
+      X1 = 4750 + ((miRadio * (miMiniRadio / miZoom)) * -Cos(i * miDelta * (miPi / 180)) * miFactorCircular)
+      Y1 = 4750 + ((miRadio * (miMiniRadio / miZoom)) * Sin(i * miDelta * (miPi / 180)) * miFactorCircular)
+    End If
+
+    ' Guarda el número y sus coordenadas
+    miNumeros(i) = i
+    miX(i) = X1
+    miY(i) = Y1
+
+    ' Calcula si es primo
+    If Primo(i) = True Then
+
+      miCuentaPrimos = miCuentaPrimos + 1
+
+      ' Calcula cantidad Superior e inferior
+      If Y1 <= 4750 Then
+        miCuentaSuperior = miCuentaSuperior + 1
       Else
-        X1 = 4750 + ((miRadio * (miMiniRadio / miZoom)) * Cos(i * miDelta * (miPi / 180)) * miFactorCircular)
-        Y1 = 4750 + ((miRadio * (miMiniRadio / miZoom)) * -Sin(i * miDelta * (miPi / 180)) * miFactorCircular)
+        miCuentaInferior = miCuentaInferior + 1
       End If
 
-      ' Guarda el número y sus coordenadas
-      miNumeros(i) = i
-      miX(i) = X1
-      miY(i) = Y1
-
-      ' Calcula si es primo
-      If Primo(i) = True Then
-
-        miCuentaPrimos = miCuentaPrimos + 1
-
-        ' Calcula cantidad Superior e inferior
-        If Y1 <= 4750 Then
-          miCuentaSuperior = miCuentaSuperior + 1
-        Else
-          miCuentaInferior = miCuentaInferior + 1
-        End If
-
-        ' Control de Rango
-        If miRango = True Then
-          If i >= Val(txtMin.Text) And i <= Val(txtMax.Text) Then
-            ' Solo muestra el rango
-            ' Muestra los primos
-            If miLineasP = True Then
-              ' Línea Prima
-              Line (X1, Y1)-(4750, 4750), vbYellow
-            End If
-            ' Punto Primo
-            If miPrimos = True Then
-              For r = 0 To miTamañoPunto
-                Circle (X1, Y1), r, QBColor(12)
-              Next r
-              If miEtiqueta = True Then
-                frmRadianPrimo.ForeColor = vbRed
-                Print i
-              End If
-            End If
-
-          End If
-        Else
-          ' Muestra todo
-
+      ' Control de Rango
+      If miRango = True Then
+        If i >= Val(txtMin.Text) And i <= Val(txtMax.Text) Then
+          ' Solo muestra el rango
           ' Muestra los primos
           If miLineasP = True Then
             ' Línea Prima
@@ -1578,65 +1579,89 @@ Public Sub Grafica()
               Print i
             End If
           End If
-        End If
 
-        ' Muestra las líneas de las ramas
-        If miRama = True Then
-          ' Linea Rama
-          miPXS = X1
-          miPYS = Y1
-          frmRadianPrimo.ForeColor = vbWhite
-          'frmRadianPrimo.ForeColor = vbBlack
-          If miPXA <> 4750 Then
+        End If
+      Else
+        ' Muestra todo
+
+        ' Muestra los primos
+        If miLineasP = True Then
+          ' Línea Prima
+          Line (X1, Y1)-(4750, 4750), vbYellow
+        End If
+        ' Punto Primo
+        If miPrimos = True Then
+          For r = 0 To miTamañoPunto
+            Circle (X1, Y1), r, QBColor(12)
+          Next r
+          If miEtiqueta = True Then
+            frmRadianPrimo.ForeColor = vbRed
+            Print i
+          End If
+        End If
+      End If
+
+      ' Muestra las líneas de las ramas
+      If miRama = True Then
+        ' Linea Rama
+        miPXS = X1
+        miPYS = Y1
+        frmRadianPrimo.ForeColor = vbWhite
+        'frmRadianPrimo.ForeColor = vbBlack
+        If miPXA <> 4750 Then
+          ' Control de Rango
+          If miRango = True Then
+            If i >= Val(txtMin.Text) And i <= Val(txtMax.Text) Then
+              ' Solo muestra el rango
+              Line (miPXA, miPYA)-(miPXS, miPYS)
+
+            End If
+          Else
+            ' Muestra todo
+            Line (miPXA, miPYA)-(miPXS, miPYS)
+          End If
+        End If
+        miPXA = miPXS
+        miPYA = miPYS
+      End If
+
+      ' Reinicia
+      miPXA = 4750
+      miPYA = 4750
+      miPXS = 4750
+      miPYS = 4750
+
+      ' Une Puntos
+      If i <> 2 Then
+        If miUne = True Then
+          ' Caso especial 3 y 5
+          If i = 3 Then
+            X3 = X1
+            Y3 = Y1
+          End If
+          If i = 5 Then
+            X5 = X1
+            Y5 = Y1
             ' Control de Rango
             If miRango = True Then
               If i >= Val(txtMin.Text) And i <= Val(txtMax.Text) Then
                 ' Solo muestra el rango
-                Line (miPXA, miPYA)-(miPXS, miPYS)
-
+                Line (X3, Y3)-(X5, Y5), vbGreen
               End If
             Else
               ' Muestra todo
-              Line (miPXA, miPYA)-(miPXS, miPYS)
+              Line (X3, Y3)-(X5, Y5), vbGreen
             End If
           End If
-          miPXA = miPXS
-          miPYA = miPYS
-        End If
-
-        ' Reinicia
-        miPXA = 4750
-        miPYA = 4750
-        miPXS = 4750
-        miPYS = 4750
-
-        ' Une Puntos
-        If i <> 2 Then
-          If miUne = True Then
-            ' Caso especial 3 y 5
-            If i = 3 Then
-              X3 = X1
-              Y3 = Y1
-            End If
-            If i = 5 Then
-              X5 = X1
-              Y5 = Y1
-              ' Control de Rango
-              If miRango = True Then
-                If i >= Val(txtMin.Text) And i <= Val(txtMax.Text) Then
-                  ' Solo muestra el rango
-                  Line (X3, Y3)-(X5, Y5), vbGreen
-                End If
-              Else
-                ' Muestra todo
-                Line (X3, Y3)-(X5, Y5), vbGreen
-              End If
-            End If
-            ' Almacena el actual
-            If Primo(i + 2) Then
-              X2 = X1
-              Y2 = Y1
-            End If
+          ' Almacena el actual
+          If Primo(i + 2) Then
+            X2 = X1
+            Y2 = Y1
+          End If
+          '***************************************************************************
+          ' PARA MOSTRAR UNICAMENTE LOS PRIMOS GEMELOS EN CIERTOS ANGULOS
+          '***************************************************************************
+          If MIANGULOPROCESO > Val(txtAngInf.Text) And MIANGULOPROCESO < Val(txtAngSup.Text) Then
             ' Los une en el momento oportuno
             If (i - 2) > 0 Then
               If Primo(i - 2) Then
@@ -1653,54 +1678,43 @@ Public Sub Grafica()
               End If
             End If
           End If
+          '***************************************************************************
         End If
+      End If
 
-        ' Aumenta un primo en la orbita
-        miOrbitaP(miMiniRadio) = miOrbitaP(miMiniRadio) + 1
-        If Primo(i + 2) Then
-          miOrbitaPG(miMiniRadio) = True
-        End If
+      ' Aumenta un primo en la orbita
+      miOrbitaP(miMiniRadio) = miOrbitaP(miMiniRadio) + 1
+      If Primo(i + 2) Then
+        miOrbitaPG(miMiniRadio) = True
+      End If
 
-        ' Activa y desactiva las orbitas
-        If miOrbita = True Then
-          miMiniRadio = 1
-        Else
-          miMiniRadio = 50
-        End If
-
+      ' Activa y desactiva las orbitas
+      If miOrbita = True Then
+        miMiniRadio = 1
       Else
-        If miLineasC = True Then
-          ' Control de Rango
-          If miRango = True Then
-            If i >= Val(txtMin.Text) And i <= Val(txtMax.Text) Then
-              ' Solo muestra el rango
-              Line (X1, Y1)-(4750, 4750), vbBlue
-            End If
-          Else
-            ' Muestra todo
-            ' Línea Prima
-            Line (X1, Y1)-(4750, 4750), vbBlue
-          End If
-        End If
+        miMiniRadio = 50
+      End If
 
-
+    Else
+      If miLineasC = True Then
         ' Control de Rango
         If miRango = True Then
           If i >= Val(txtMin.Text) And i <= Val(txtMax.Text) Then
             ' Solo muestra el rango
-            ' Muestra los compuestos
-            If miCompuestos = True Then
-              For r = 0 To miTamañoPunto
-                Circle (X1, Y1), r, QBColor(0)
-              Next r
-              If miEtiqueta = True Then
-                frmRadianPrimo.ForeColor = vbBlack
-                Print i
-              End If
-            End If
+            Line (X1, Y1)-(4750, 4750), vbBlue
           End If
         Else
           ' Muestra todo
+          ' Línea Prima
+          Line (X1, Y1)-(4750, 4750), vbBlue
+        End If
+      End If
+
+
+      ' Control de Rango
+      If miRango = True Then
+        If i >= Val(txtMin.Text) And i <= Val(txtMax.Text) Then
+          ' Solo muestra el rango
           ' Muestra los compuestos
           If miCompuestos = True Then
             For r = 0 To miTamañoPunto
@@ -1712,49 +1726,66 @@ Public Sub Grafica()
             End If
           End If
         End If
-
-
-        ' Muestra las líneas de las ramas
-        If miRama = True Then
-          ' Linea Rama
-          miPXS = X1
-          miPYS = Y1
-          frmRadianPrimo.ForeColor = vbWhite
-          'frmRadianPrimo.ForeColor = vbBlack
-          If miPXA <> 4750 Then
-            ' Control de Rango
-            If miRango = True Then
-              If i >= Val(txtMin.Text) And i <= Val(txtMax.Text) Then
-                ' Solo muestra el rango
-                Line (miPXA, miPYA)-(miPXS, miPYS)
-              End If
-            Else
-              ' Muestra todo
-              Line (miPXA, miPYA)-(miPXS, miPYS)
-            End If
+      Else
+        ' Muestra todo
+        ' Muestra los compuestos
+        If miCompuestos = True Then
+          For r = 0 To miTamañoPunto
+            Circle (X1, Y1), r, QBColor(0)
+          Next r
+          If miEtiqueta = True Then
+            frmRadianPrimo.ForeColor = vbBlack
+            Print i
           End If
-          miPXA = miPXS
-          miPYA = miPYS
-        End If
-
-        ' Aumenta un compuesto en la orbita
-        miOrbitaC(miMiniRadio) = miOrbitaC(miMiniRadio) + 1
-
-        ' Activa y desactiva las orbitas
-        If miOrbita = True Then
-          miMiniRadio = miMiniRadio + 1
-        End If
-
-        ' Controla a la orbita maxima
-        If miMiniRadio > miOrbitaMaxima Then
-          miOrbitaMaxima = miOrbitaMaxima + 1
-          ReDim Preserve miOrbitaP(miOrbitaMaxima)
-          ReDim Preserve miOrbitaC(miOrbitaMaxima)
         End If
       End If
 
-      ' Pinta recta en punto tangente a los primos gemelos
-      If miPG = True Then
+
+      ' Muestra las líneas de las ramas
+      If miRama = True Then
+        ' Linea Rama
+        miPXS = X1
+        miPYS = Y1
+        frmRadianPrimo.ForeColor = vbWhite
+        'frmRadianPrimo.ForeColor = vbBlack
+        If miPXA <> 4750 Then
+          ' Control de Rango
+          If miRango = True Then
+            If i >= Val(txtMin.Text) And i <= Val(txtMax.Text) Then
+              ' Solo muestra el rango
+              Line (miPXA, miPYA)-(miPXS, miPYS)
+            End If
+          Else
+            ' Muestra todo
+            Line (miPXA, miPYA)-(miPXS, miPYS)
+          End If
+        End If
+        miPXA = miPXS
+        miPYA = miPYS
+      End If
+
+      ' Aumenta un compuesto en la orbita
+      miOrbitaC(miMiniRadio) = miOrbitaC(miMiniRadio) + 1
+
+      ' Activa y desactiva las orbitas
+      If miOrbita = True Then
+        miMiniRadio = miMiniRadio + 1
+      End If
+
+      ' Controla a la orbita maxima
+      If miMiniRadio > miOrbitaMaxima Then
+        miOrbitaMaxima = miOrbitaMaxima + 1
+        ReDim Preserve miOrbitaP(miOrbitaMaxima)
+        ReDim Preserve miOrbitaC(miOrbitaMaxima)
+      End If
+    End If
+
+    ' Pinta recta en punto tangente a los primos gemelos
+    If miPG = True Then
+      '***************************************************************************
+      ' PARA MOSTRAR UNICAMENTE LOS PRIMOS GEMELOS EN CIERTOS ANGULOS
+      '***************************************************************************
+      If MIANGULOPROCESO > Val(txtAngInf.Text) And MIANGULOPROCESO < Val(txtAngSup.Text) Then
         If i <> 1 Then
           If Primo(i - 1) And Primo(i + 1) Then
 
@@ -1772,22 +1803,24 @@ Public Sub Grafica()
           End If
         End If
       End If
-    Next i
-    'Restablece color de fuentes y dibuja los ejes
-    frmRadianPrimo.ForeColor = vbBlack
-    If miEjes = True Then
-      ' Ejes de Coordenadas
-      Line (4750, 0)-(4750, 9500)
-      Line (0, 4750)-(9500, 4750)
-      'Line (0, 0)-(9500, 9500)
-      'Line (0, 9500)-(9500, 0)
+      '***************************************************************************
     End If
-
-    ' Indica los Primos Gemelos
-    If (miOrbitaP(2) - 1) > 0 Then
-      txtPrimosGemelos.Text = miOrbitaP(2) - 1
-    End If
+  Next i
+  'Restablece color de fuentes y dibuja los ejes
+  frmRadianPrimo.ForeColor = vbBlack
+  If miEjes = True Then
+    ' Ejes de Coordenadas
+    Line (4750, 0)-(4750, 9500)
+    Line (0, 4750)-(9500, 4750)
+    'Line (0, 0)-(9500, 9500)
+    'Line (0, 9500)-(9500, 0)
   End If
+
+  ' Indica los Primos Gemelos
+  If (miOrbitaP(2) - 1) > 0 Then
+    txtPrimosGemelos.Text = miOrbitaP(2) - 1
+  End If
+
 
   If miUneGap = True Then
     Call MostrarGap
@@ -1831,7 +1864,7 @@ Private Sub cmdEstadisticaOrbita_Click()
     Print #1, Tabulado(Trim(Str(i)), 5); "  "; _
               Tabulado(Trim(Str(miOrbitaP(i))), 5); "  "; _
               Tabulado(Trim(Str(miOrbitaC(i))), 5); "  "; _
-              "   ***    "; "  "; _
+            "   ***    "; "  "; _
               Tabulado(Trim(Format(PorcentajePrimo, "##,##0.00")), 6); "  "; _
               Tabulado(Trim(Format(PorcentajeCompuesto, "##,##0.00")), 6); "  ";
     If miOrbitaP(i) > 0 Then
@@ -2217,3 +2250,6 @@ End Sub
 'End Function
 '
 
+Private Sub txtTamañoPunto_Change()
+
+End Sub
